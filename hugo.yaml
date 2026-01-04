@@ -27,20 +27,17 @@ menu:
     - name: About
       pageRef: /about
       weight: 3
-    - name: Contact ↗
-      url: "https://github.com/imfing"
-      weight: 4
     - name: Search
-      weight: 5
+      weight: 4
       params:
         type: search
     - name: GitHub
-      weight: 6
+      weight: 5
       url: "https://github.com/marcuszorian"
       params:
         icon: github
     - name: LinkedIn
-      weight: 7
+      weight: 6
       url: "https://www.linkedin.com/in/marcus-zorian/"
       params:
         icon: linkedin
