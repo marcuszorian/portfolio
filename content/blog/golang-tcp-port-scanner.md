@@ -117,7 +117,7 @@ func getOpenPorts(hostname string, ports PortRange) {
 		}
 	}()
 
-	// Close results after workers doneThe program scans a specified host for open TCP ports using multiple goroutines and channels. It reports open ports along with common service names and supports scanning either well-known ports (1–1024) or the full range (1–65535).
+	// Close results after workers done
 	go func() {
 		waitGroup.Wait()
 		close(resultChan)
@@ -131,7 +131,7 @@ func getOpenPorts(hostname string, ports PortRange) {
 	sort.Ints(openPorts)
 
 	for _, port := range openPorts {
-		if service, ok := common_ports[port]; ok { // ok indicates if a map value exists
+		if service, ok := common_ports[port]; ok { // if service exists in commmon_ports
 			fmt.Printf("%d: %s (open)\n", port, service)
 		} else {
 			fmt.Printf("%d: unknown (open)\n", port)
@@ -139,9 +139,9 @@ func getOpenPorts(hostname string, ports PortRange) {
 	}
 }
 
-func scanPort(hostname string, port int) bool { // lowercase indicated private function
-	address := hostname + ":" + strconv.Itoa(port) // hostname + port
-	conn, err := net.DialTimeout("tcp", address, 250*time.Millisecond)
+func scanPort(hostname string, port int) bool { // Perform connect scan on port
+	address := hostname + ":" + strconv.Itoa(port) // hostname:port
+	conn, err := net.DialTimeout("tcp", address, 250*time.Millisecond) // Attempts TCP connection to address, returning conn if successful or err otherwise
 	if err != nil {
 		return false
 	}
@@ -169,7 +169,6 @@ func main() {
 	} else {
 		getOpenPorts(hostname, PortRange{Start: 1, End: 1024})
 	}
-}
 ```
 
 ## Optimisation
@@ -197,7 +196,7 @@ Originally, the program was created with a single-threaded design, meaning that 
 conn, err := net.DialTimeout("tcp", address, 5*time.Second)
 ```
 
-Additionally, the 5-second TCP timeout amplified the problem. Scanning 1024 ports could take 85+ minutes in the worst case.
+Additionally, I applied a 5-second TCP timeout, which further amplified the problem. In combination with the single-threaded design, scanning 1024 ports could take 85+ minutes in the worst case.
 
 ### Resolution
 
